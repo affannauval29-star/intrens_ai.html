@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Intrens AI</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+#chatbox {
+  width: 90%;
+  max-width: 500px;
+  height: 400px;
+  margin: auto;
+  background: #1e293b;
+  padding: 10px;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.bubble {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.user {
+  background: #22c55e;
+  text-align: right;
+  margin-left: auto;
+}
+
+.ai {
+  background: #334155;
+  text-align: left;
+  margin-right: auto;
+}
+
+.time {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+input {
+  width: 70%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  background: #22c55e;
+  border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🤖 Intrens AI</h1>
+<p>Dibuat oleh: Affan</p>
+
+<div id="chatbox"></div>
+
+<br>
+
+<input type="text" id="input" placeholder="Ketik pesan..." onkeypress="enter(event)">
+<button onclick="chat()">Kirim</button>
+
+<script>
+function waktu() {
+  let d = new Date();
+  return d.getHours() + ":" + String(d.getMinutes()).padStart(2,'0');
+}
+
+// AI langsung nyapa
+window.onload = function() {
+  let chatbox = document.getElementById("chatbox");
+  let opening = "Halo Affan, ada yang bisa saya bantu?";
+
+  chatbox.innerHTML += `
+    <div class="bubble ai">
+      ${opening}
+      <div class="time">${waktu()}</div>
+    </div>
+  `;
+
+  let suara = new SpeechSynthesisUtterance(opening);
+  speechSynthesis.speak(suara);
+};
+
+function chat() {
+  let input = document.getElementById("input").value;
+  if (input === "") return;
+
+  let chatbox = document.getElementById("chatbox");
+
+  chatbox.innerHTML += `
+    <div class="bubble user">
+      ${input}
+      <div class="time">${waktu()}</div>
+    </div>
+  `;
+
+  let text = input.toLowerCase();
+  let output = "";
+
+  if (text.includes("halo")) {
+    output = "Halo juga Affan! 😄";
+  } 
+  else if (text.includes("lagi apa")) {
+    output = "Sedang membantu kamu 😊";
+  } 
+  else {
+    output = "Baik Affan, aku akan bantu.";
+  }
+
+  setTimeout(() => {
+    chatbox.innerHTML += `
+      <div class="bubble ai">
+        ${output}
+        <div class="time">${waktu()}</div>
+      </div>
+    `;
+
+    let suara = new SpeechSynthesisUtterance(output);
+    speechSynthesis.speak(suara);
+
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }, 500);
+
+  document.getElementById("input").value = "";
+}
+
+function enter(e) {
+  if (e.key === "Enter") {
+    chat();
+  }
+}
+</script>
+
+</body>
+</html>
